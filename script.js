@@ -24,6 +24,7 @@ async function processImage (img) {
 
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
+  canvas.style.display = 'none' // Hide image initially until processing is complete
   canvas.width = newWidth
   canvas.height = newHeight
 
@@ -54,22 +55,9 @@ async function processImage (img) {
     console.log(pixelationFactor)
 
     pixelateArea(ctx, x, y, width, height, pixelationFactor)
-
-    // Draw bounding box
-    ctx.strokeStyle = 'red'
-    ctx.lineWidth = Math.max(2, 2 * scaleRatio) // Scale bounding box line width according to image
-    ctx.strokeRect(x, y, width, height)
-
-    // Draw class label and confidence score
-    const fontSize = Math.max(16, 16 * scaleRatio) // Scale font size according to image
-    ctx.fillStyle = 'red'
-    ctx.font = `${fontSize}px Arial`
-    ctx.fillText(
-      `${className} (${Math.round(score * 100)}%)`,
-      x,
-      y > 10 ? y - 5 : 10
-    )
   })
+
+  canvas.style.display = 'block' // Show canvas once image has been processed
 }
 
 function pixelateArea (ctx, x, y, width, height, factor) {
