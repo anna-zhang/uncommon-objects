@@ -50,9 +50,8 @@ async function processImage (img) {
     height = Math.round(height)
 
     // Apply pixelation based on confidence score
-    const maxPixelation = Math.sqrt(newWidth * newHeight) / 10 // The larger the image, the greater the maximum pixelation can be
+    const maxPixelation = Math.sqrt(newWidth * newHeight) / 20 // The larger the image, the greater the maximum pixelation can be
     const pixelationFactor = Math.max(1, Math.floor(score * maxPixelation))
-    console.log(pixelationFactor)
 
     pixelateArea(ctx, x, y, width, height, pixelationFactor)
   })
