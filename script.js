@@ -24,7 +24,9 @@ async function processImage (img) {
 
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
+  const saveButton = document.getElementById('save-button')
   canvas.style.display = 'none' // Hide image initially until processing is complete
+  saveButton.style.display = 'none' // Hide save button initially until processing is complete
   canvas.width = newWidth
   canvas.height = newHeight
 
@@ -57,6 +59,7 @@ async function processImage (img) {
   })
 
   canvas.style.display = 'block' // Show canvas once image has been processed
+  saveButton.style.display = 'block' // Show save button once image has been processed
 }
 
 function pixelateArea (ctx, x, y, width, height, factor) {
@@ -119,4 +122,19 @@ function pixelateArea (ctx, x, y, width, height, factor) {
   }
 
   ctx.putImageData(imageData, x, y)
+}
+
+function saveImage () {
+  const canvas = document.getElementById('canvas')
+
+  // Get the canvas data as a data URL (base64 encoded PNG)
+  const imageData = canvas.toDataURL('image/jpeg')
+
+  // Create a temporary link element
+  const link = document.createElement('a')
+  link.href = imageData
+  link.download = 'uncommon-object.jpg' // Set file name
+
+  // Trigger the download by programmatically clicking the link
+  link.click()
 }
