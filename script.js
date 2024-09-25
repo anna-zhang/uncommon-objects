@@ -24,9 +24,7 @@ async function processImage (img) {
 
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
-  const saveButton = document.getElementById('save-button')
   canvas.style.display = 'none' // Hide image initially until processing is complete
-  saveButton.style.display = 'none' // Hide save button initially until processing is complete
   canvas.width = newWidth
   canvas.height = newHeight
 
@@ -54,12 +52,12 @@ async function processImage (img) {
     // Apply pixelation based on confidence score
     const maxPixelation = Math.sqrt(newWidth * newHeight) / 20 // The larger the image, the greater the maximum pixelation can be
     const pixelationFactor = Math.max(1, Math.floor(score * maxPixelation))
+    console.log(className)
 
     pixelateArea(ctx, x, y, width, height, pixelationFactor)
   })
 
   canvas.style.display = 'block' // Show canvas once image has been processed
-  saveButton.style.display = 'block' // Show save button once image has been processed
 }
 
 function pixelateArea (ctx, x, y, width, height, factor) {

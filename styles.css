@@ -24,8 +24,3 @@ canvas {
     margin-top: 20px;
     display: none;
 }
-
-#save-button {
-    display: none;
-    margin: auto;      /* Auto margins horizontally center it */
-}
