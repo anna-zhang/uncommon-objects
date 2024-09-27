@@ -24,3 +24,7 @@ canvas {
     margin-top: 20px;
     display: none;
 }
+
+#bbCheckboxDiv, p {
+    font-size: 12px;
+}

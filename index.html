@@ -18,6 +18,12 @@
         <input type="file" id="upload" accept="image/*" class="file-input">
         <br>
         <canvas id="canvas"></canvas>
+        <br>
+        <div id="bbCheckboxDiv" style="display: none;">
+            <input type="checkbox" id="showBoundingBox">
+            <label for="showBoundingBox">Show common objects</label>
+        </div>     
+        <p id="message" style="display: none;">(No common objects found.)</p>
     </div>
     </div>
     <script src="script.js"></script>

@@ -1,5 +1,19 @@
 document.getElementById('upload').addEventListener('change', handleImageUpload)
 
+const showBoundingBoxCheckbox = document.getElementById('showBoundingBox')
+const bbCheckboxDiv = document.getElementById('bbCheckboxDiv')
+const messageElement = document.getElementById('message')
+
+let currentImage = null
+let currentPredictions = null
+let scaleRatio = 1
+
+showBoundingBoxCheckbox.addEventListener('change', () => {
+  if (currentImage && currentPredictions) {
+    redrawCanvasWithBoundingBoxes() // Display / hide any bounding boxes and labels
+  }
+})
+
 function handleImageUpload (event) {
   const file = event.target.files[0]
   const reader = new FileReader()
@@ -18,7 +32,7 @@ async function processImage (img) {
   const maxWidth = window.innerWidth * 0.9
   const maxHeight = window.innerHeight * 0.7
 
-  const scaleRatio = Math.min(maxWidth / img.width, maxHeight / img.height)
+  scaleRatio = Math.min(maxWidth / img.width, maxHeight / img.height)
   const newWidth = img.width * scaleRatio
   const newHeight = img.height * scaleRatio
 
@@ -30,8 +44,21 @@ async function processImage (img) {
 
   ctx.drawImage(img, 0, 0, newWidth, newHeight)
 
+  messageElement.style.display = 'none' // Hide message that no common objects were found
+  bbCheckboxDiv.style.display = 'none' // Hide option to see bounding box & labels
+  showBoundingBoxCheckbox.checked = false
+
   const model = await cocoSsd.load()
   const predictions = await model.detect(img)
+
+  currentImage = img
+  currentPredictions = predictions
+
+  if (predictions.length === 0) {
+    messageElement.style.display = 'block' // Show message that no common objects were found
+    canvas.style.display = 'block' // Show canvas with original image
+    return
+  }
 
   predictions.forEach(prediction => {
     const { bbox, class: className, score } = prediction
@@ -58,6 +85,7 @@ async function processImage (img) {
   })
 
   canvas.style.display = 'block' // Show canvas once image has been processed
+  bbCheckboxDiv.style.display = 'block' // Show option to see bounding box & labels
 }
 
 function pixelateArea (ctx, x, y, width, height, factor) {
@@ -120,6 +148,59 @@ function pixelateArea (ctx, x, y, width, height, factor) {
   }
 
   ctx.putImageData(imageData, x, y)
+}
+
+function redrawCanvasWithBoundingBoxes () {
+  const canvas = document.getElementById('canvas')
+  const ctx = canvas.getContext('2d')
+
+  // Clear the canvas first
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  // Redraw the image
+  ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height)
+
+  // Redraw the pixelated areas and bounding boxes
+  currentPredictions.forEach(prediction => {
+    const { bbox, class: className, score } = prediction
+    let [x, y, width, height] = bbox
+
+    // Scale bounding box coordinates
+    x *= scaleRatio
+    y *= scaleRatio
+    width *= scaleRatio
+    height *= scaleRatio
+
+    // Round the values to the nearest integer
+    x = Math.round(x)
+    y = Math.round(y)
+    width = Math.round(width)
+    height = Math.round(height)
+
+    // Apply pixelation based on confidence score
+    const maxPixelation = Math.sqrt(canvas.width * canvas.height) / 20 // The larger the image, the greater the maximum pixelation can be
+    const pixelationFactor = Math.max(1, Math.floor(score * maxPixelation))
+    console.log(className)
+
+    pixelateArea(ctx, x, y, width, height, pixelationFactor)
+
+    // If the checkbox is checked, draw the bounding box and label
+    if (showBoundingBoxCheckbox.checked) {
+      // Draw bounding box
+      ctx.strokeStyle = 'red'
+      ctx.lineWidth = Math.max(2, 2 * scaleRatio) // Scale bounding box line width according to image
+      ctx.strokeRect(x, y, width, height)
+      // Draw class label and confidence score
+      const fontSize = Math.max(16, 16 * scaleRatio) // Scale font size according to image
+      ctx.fillStyle = 'red'
+      ctx.font = `${fontSize}px Arial`
+      ctx.fillText(
+        `${className} (${Math.round(score * 100)}%)`,
+        x,
+        y > 10 ? y - 5 : 10
+      )
+    }
+  })
 }
 
 function saveImage () {
