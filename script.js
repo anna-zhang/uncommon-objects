@@ -3,6 +3,7 @@ document.getElementById('upload').addEventListener('change', handleImageUpload)
 const showBoundingBoxCheckbox = document.getElementById('showBoundingBox')
 const bbCheckboxDiv = document.getElementById('bbCheckboxDiv')
 const messageElement = document.getElementById('message')
+const loadingText = document.getElementById('loading')
 
 let currentImage = null
 let currentPredictions = null
@@ -15,7 +16,18 @@ showBoundingBoxCheckbox.addEventListener('change', () => {
 })
 
 function handleImageUpload (event) {
+  canvas.style.display = 'none' // Hide image initially until processing is complete
+  messageElement.style.display = 'none' // Hide message that no common objects were found
+  bbCheckboxDiv.style.display = 'none' // Hide option to see bounding box & labels
+
+  // Show the "Loading..." text
+  loadingText.style.display = 'block'
+
   const file = event.target.files[0]
+  if (!file) {
+    error('No file found.')
+  }
+
   const reader = new FileReader()
   reader.onload = function (e) {
     const img = new Image()
@@ -38,14 +50,11 @@ async function processImage (img) {
 
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
-  canvas.style.display = 'none' // Hide image initially until processing is complete
   canvas.width = newWidth
   canvas.height = newHeight
 
   ctx.drawImage(img, 0, 0, newWidth, newHeight)
 
-  messageElement.style.display = 'none' // Hide message that no common objects were found
-  bbCheckboxDiv.style.display = 'none' // Hide option to see bounding box & labels
   showBoundingBoxCheckbox.checked = false
 
   const model = await cocoSsd.load()
@@ -55,6 +64,7 @@ async function processImage (img) {
   currentPredictions = predictions
 
   if (predictions.length === 0) {
+    loadingText.style.display = 'none' // Hide "Loading..." text
     messageElement.style.display = 'block' // Show message that no common objects were found
     canvas.style.display = 'block' // Show canvas with original image
     return
@@ -84,6 +94,7 @@ async function processImage (img) {
     pixelateArea(ctx, x, y, width, height, pixelationFactor)
   })
 
+  loadingText.style.display = 'none' // Hide "Loading..." text
   canvas.style.display = 'block' // Show canvas once image has been processed
   bbCheckboxDiv.style.display = 'block' // Show option to see bounding box & labels
 }
