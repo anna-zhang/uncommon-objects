@@ -31,6 +31,11 @@ canvas {
     font-size: clamp(16px, 0.8rem, 36px);
 }
 
+.message {
+    width: 50%;
+    text-align: center;
+}
+
 .links {
     position: fixed; 
     bottom: 0; 
@@ -42,4 +47,14 @@ canvas {
 
 a {
     color: blue;
+}
+
+
+@media (max-width: 600px) {
+    p {
+      font-size: clamp(12px, 4vw + 1rem, 20px);
+    }
+    .message {
+        width: 80%;
+    }
 }
