@@ -199,10 +199,10 @@ function redrawCanvasWithBoundingBoxes () {
     if (showBoundingBoxCheckbox.checked) {
       // Draw bounding box
       ctx.strokeStyle = 'red'
-      ctx.lineWidth = Math.max(2, 2 * scaleRatio) // Scale bounding box line width according to image
+      ctx.lineWidth = Math.max(3, 2 * scaleRatio) // Scale bounding box line width according to image
       ctx.strokeRect(x, y, width, height)
       // Draw class label and confidence score
-      const fontSize = Math.max(16, 16 * scaleRatio) // Scale font size according to image
+      const fontSize = Math.max(20, 16 * scaleRatio) // Scale font size according to image
       ctx.fillStyle = 'red'
       ctx.font = `${fontSize}px Arial`
       ctx.fillText(

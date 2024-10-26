@@ -6,7 +6,7 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
-    padding-bottom: 1em;
+    padding-bottom: 1rem;
 }
 
 h1 {
@@ -14,7 +14,7 @@ h1 {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    font-size: clamp(48px, 2.5em, 60px);
+    font-size: clamp(36px, 2.5rem, 60px);
 }
 
 .container {
@@ -28,7 +28,7 @@ canvas {
 }
 
 #bbCheckboxDiv, p {
-    font-size: clamp(14px, 0.8em, 24px);
+    font-size: clamp(16px, 0.8rem, 36px);
 }
 
 .links {
@@ -37,7 +37,7 @@ canvas {
     left: 50%; 
     transform: translateX(-50%); 
     padding: 10px 20px;
-    font-size: clamp(14px, 0.8em, 24px);
+    font-size: clamp(16px, 0.8rem, 36px);
 }
 
 a {
