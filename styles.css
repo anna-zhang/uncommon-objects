@@ -6,6 +6,7 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
+    padding-bottom: 20px;
 }
 
 h1 {
@@ -27,4 +28,17 @@ canvas {
 
 #bbCheckboxDiv, p {
     font-size: 12px;
+}
+
+.links {
+    position: fixed; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    padding: 10px 20px;
+    font-size: 12px;
+}
+
+a {
+    color: blue;
 }
