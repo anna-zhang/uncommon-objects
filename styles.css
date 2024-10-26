@@ -14,7 +14,7 @@ h1 {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    font-size: clamp(36px, 2.5rem, 60px);
+    font-size: clamp(36px, 2rem, 60px);
 }
 
 .container {
@@ -51,9 +51,6 @@ a {
 
 
 @media (max-width: 600px) {
-    p {
-      font-size: clamp(12px, 4vw + 1rem, 20px);
-    }
     .message {
         width: 80%;
     }
